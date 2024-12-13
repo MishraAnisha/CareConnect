@@ -1,5 +1,5 @@
-import jwt from 'jsonwebtoken'; 
-import User from '../models/UserSchema.js'; 
+import jwt from 'jsonwebtoken';
+import User from '../models/UserSchema.js';
 import Doctor from '../models/DoctorSchema.js';
 
 export const authenticate = async (req, res, next) => {
@@ -18,8 +18,8 @@ export const authenticate = async (req, res, next) => {
         // Verify the token
         const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY); // Ensure your secret is set
 
-        // Optionally, fetch user information if needed
-        const user = await User.findById(decoded.id);
+        // Fetch user information if needed
+        const user = await User.findById(decoded.id) || await Doctor.findById(decoded.id);
 
         // Check if the user exists
         if (!user) {
@@ -39,30 +39,25 @@ export const authenticate = async (req, res, next) => {
         }
         return res.status(401).json({ success: false, message: 'Invalid token' });
     }
-  
-  export const restrict = roles => {  async (req, res, next) => {
+};
+
+export const restrict = roles => {
+    return async (req, res, next) => {
         const userId = req.userId; // Assuming userId is set in the request by the authentication middleware
 
-    let user;
-    const patient = await User.findById(userId);
-    const doctor = await Doctor.findById(userId);
+        // Fetch the user based on their type
+        const user = await User.findById(userId) || await Doctor.findById(userId);
 
-    let user;
+        // Check if the user exists
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
 
-    if (patient) {
-        user = patient;
-    } else if (doctor) {
-        user = doctor;
-    } else {
-        return res.status(404).json({ success: false, message: 'User not found' });
-    }
-   // Define allowed roles
-    const roles = ['admin', 'doctor'];
+        // Check if the user's role is allowed
+        if (!roles.includes(user.role)) {
+            return res.status(401).json({ success: false, message: "You're not authorized" });
+        }
 
-    // Check if the user's role is NOT allowed
-    if (!roles.includes(user.role)) {
-        return res.status(401).json({ success: false, message: "You're not authorized" });
-    }
-
-    next(); // Proceed to the next middleware or route handler
-};
+        next(); // Proceed to the next middleware or route handler
+    };
+}
