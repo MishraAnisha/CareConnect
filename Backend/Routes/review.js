@@ -1,13 +1,13 @@
 import express from 'express';
 import { getAllReviews, createReview } from '../controllers/reviewController.js';
-import { authenticate, restrict } from '../auth/verify.js';
+import { authenticate, restrict } from '../auth/verifyToken.js';
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 // Route to get all reviews
-router.get('/reviews', getAllReviews);
-
-// Route to create a new review with authentication and restriction for 'patient' role
-router.post('/reviews', authenticate, restrict('patient'), createReview);
+router
+  .route('/')
+  .get(getAllReviews) // Public route to get all reviews
+  .post(authenticate, restrict(['patient']), createReview); // Protected route to create a review
 
 export default router;
