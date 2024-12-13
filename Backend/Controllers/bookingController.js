@@ -1,45 +1,45 @@
-const Stripe = require('stripe');
-const Doctor = require('../models/Doctor'); // Assuming you have a Doctor model
-const User = require('../models/User'); // Assuming you have a User model
+import Doctor from '../models/DoctorSchema.js';
+import User from '../models/UserSchema.js';
+import Booking from '../models/bookingSchema.js';
+import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY); // Initialize Stripe with secret key
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export const getCheckoutSession = async (req, res) => {
-    try {
-        // Get currently booked doctor
-        const doctor = await Doctor.findById(req.params.doctorId);
-        const user = await User.findById(req.userId); // Assuming userId is set in the request
-
-        if (!doctor) {
-            return res.status(404).json({ success: false, message: 'Doctor not found' });
-        }
-
-        // Create Stripe checkout session
-        const session = await stripe.checkout.sessions.create({
-            payment_method_types: ['card'],
-            customer_email: user.email, // Optional: Pre-fill email for the customer
-            line_items: [
-                {
-                    price_data: {
-                        currency: 'usd',
-                        product_data: {
-                            name: doctor.name, // Doctor's name for the product
-                            description: doctor.specialization, // Doctor's specialization
-                        },
-                        unit_amount: doctor.fee * 100, // Fee in cents
-                    },
-                    quantity: 1,
-                },
-            ],
-            mode: 'payment',
-            success_url: `${process.env.FRONTEND_URL}/success`, // Redirect on success
-            cancel_url: `${process.env.FRONTEND_URL}/cancel`, // Redirect on cancel
-        });
-
-        // Respond with session URL
-        res.status(200).json({ success: true, sessionId: session.id });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ success: false, message: 'Server error' });
+  try {
+    // Get currently booked doctor
+    const doctor = await Doctor.findById(req.params.doctorId);
+    
+    if (!doctor) {
+      return res.status(404).json({ message: 'Doctor not found' });
     }
+
+    // Create a checkout session
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      success_url: `${process.env.CLIENT_SITE_URL}/checkout-success`,
+      cancel_url: `${req.protocol}://${req.get('host')}/checkout/${doctorId}`,
+      customer_email: req.user.email, // Assuming user email is attached to the request
+      line_items: [{
+        price_data: {
+          currency: 'bdt',
+          product_data: {
+            name: doctor.name,
+            description: doctor.bio, // Assuming doctor object has a bio property
+            images: [doctor.photo], // Assuming doctor object has a photo URL
+          },
+          unit_amount: doctor.ticketPrice * 100, // Convert to cents
+        },
+        quantity: 1,
+      }],
+    });
+
+    // Send the session ID back to the client/////////////ADDED THIS EXTRAAA
+    res.status(200).json({ success: true, sessionId: session.id });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Error creating checkout session' });
+  }
+//
+    
 };
