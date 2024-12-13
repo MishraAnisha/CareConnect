@@ -40,6 +40,20 @@ export const getCheckoutSession = async (req, res) => {
     console.error(error);
     res.status(500).json({ success: false, message: 'Error creating checkout session' });
   }
-//
-    
+//// Create a checkout session
+    const booking = new Booking({
+      doctor: doctor._id,
+      user: req.user._id, // Assuming user ID is stored in the request
+      ticketPrice: doctor.ticketPrice,
+      session: sessionId,
+    });
+
+    await booking.save(); // Save the booking to the database
+
+    // Send response back to the client
+    res.status(200).json({ success: true, message: 'Successfully paid', session: sessionId });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Error creating booking session' });
+  }
 };
