@@ -30,4 +30,12 @@ const bookingSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+bookingSchema.pre('find', function (next) {
+  this.populate('user', 'name') // Populate user with only the name field
+      .populate({
+        path: 'doctor',
+        select: 'name', // You can change this to select other fields as needed
+      });
+  next();
+});
 export default mongoose.model("Booking", bookingSchema);
