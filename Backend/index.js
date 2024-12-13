@@ -4,6 +4,8 @@ import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import authRoute from "./Routes/auth.js";
+import userRoute from "./Routes/user.js";
+import doctorRoute from "./Routes/doctor.js";
 
 dotenv.config();
 const app = express();
@@ -18,7 +20,6 @@ app.get("/", (req, res) => {
 
 // Set mongoose to not use strictQuery (optional but recommended)
 mongoose.set("strictQuery", false);
-
 // Connect to MongoDB
 const connectDB = async () => {
   try {
@@ -33,6 +34,8 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors(corsOptions));
 app.use("/api/v1/auth", authRoute);
+app.use("/api/v1/user", userRoute);
+app.use("/api/v1/doctor", doctorRoute);
 
 app.listen(port, () => {
   connectDB();
