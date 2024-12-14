@@ -1,8 +1,9 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef ,useContext} from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import logo from '../../assets/images/logo.png'; // Adjust the path as needed
 import userImg from '../../assets/images/avatar-icon.png';
 import { BiMenu } from "react-icons/bi"; // Correct import
+import { AuthProvider } from '../../context/authContext';
 
 const navLinks = [
   { path: '/home', display: 'Home' },
@@ -14,6 +15,7 @@ const navLinks = [
 const Header = () => {
   const headerRef =useRef(null)
   const menuRef =useRef(null)
+  const {user,role, token }= useContext(authContext)
 
   const handleStickyHeader =()=>{
     window.addEventListener('scroll',()=>{
