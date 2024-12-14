@@ -1,21 +1,22 @@
-import React, { createContext, useReducer, useContext } from 'react';
+import React, { createContext, useReducer, useContext, useEffect } from 'react';
 
 // Initial state
 const initialState = {
-  user: null,
-  token: null,
+  user: JSON.parse(localStorage.getItem('user')) || null,
+  token: localStorage.getItem('token') || null,
+  role: JSON.parse(localStorage.getItem('user'))?.role || null,
   loading: false,
   error: null,
 };
 
 // Create context
-const AuthContext = createContext(initialState);
+const AuthContext = createContext(null);
 
 // Reducer function
 const authReducer = (state, action) => {
   switch (action.type) {
     case 'LOGIN_START':
-      return { 
+      return {
         ...state,
         loading: true,
         error: null,
@@ -25,13 +26,23 @@ const authReducer = (state, action) => {
         ...state,
         user: action.payload.user,
         token: action.payload.token,
-        role: action.payload.role,
+        role: action.payload.user.role,
         loading: false,
       };
     case 'LOGIN_FAILURE':
-      return { ...state, loading: false, error: action.payload.error };
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error,
+      };
     case 'LOGOUT':
-      return initialState;
+      return {
+        user: null,
+        token: null,
+        role: null,
+        loading: false,
+        error: null,
+      };
     default:
       return state;
   }
@@ -40,6 +51,20 @@ const authReducer = (state, action) => {
 // AuthProvider component
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
+
+  useEffect(() => {
+    if (state.user) {
+      localStorage.setItem('user', JSON.stringify(state.user));
+    } else {
+      localStorage.removeItem('user');
+    }
+
+    if (state.token) {
+      localStorage.setItem('token', state.token);
+    } else {
+      localStorage.removeItem('token');
+    }
+  }, [state.user, state.token]);
 
   return (
     <AuthContext.Provider value={{ state, dispatch }}>
@@ -50,5 +75,9 @@ export const AuthProvider = ({ children }) => {
 
 // Custom hook to use the AuthContext
 export const useAuth = () => {
-  return useContext(AuthContext);
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
 };
