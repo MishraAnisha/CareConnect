@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import logo from '../../assets/images/logoF.png';
 
 const quicklinks01 = [
@@ -58,7 +58,7 @@ const Footer = () => {
       <div className="container ">
         <div className="flex justify-between flex-col md:flex-row flex-wrap gap-[30px]">
           <div className='bg-white h-[90px] w-[200px] rounded-lg'>
-            <img src={logo} className='h-[90px] w-[200px]'alt="Logo" />
+            <img src={logo} className='h-[90px] w-[200px]' alt="Logo" />
             <p className="text-[16px] leading-7 font-[400] text-whitesmoke mt-4">
               Copyright &copy; {year} developed by the commandos. All rights reserved.
             </p>
@@ -67,27 +67,48 @@ const Footer = () => {
           <div>
             <h2 className='text-[20px] leading-[30px] font-[700] mb-6 text-white'>Quick links</h2>
             <ul>
-              {quicklinks01.map((item,index) => <li key={index} className='mb-4'>
-                <Link to={item.path} className="text-[16px] leading-7 font-[400] text-textColor   ">{item.display}
-              </Link></li>)}
+              {quicklinks01.map((item, index) => (
+                <li key={index} className='mb-4'>
+                  <Link
+                    to={item.path}
+                    className="text-[16px] leading-7 font-[400] text-textColor hover:text-[#2e15d1]"
+                  >
+                    {item.display}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           <div>
             <h2 className='text-[20px] leading-[30px] font-[700] mb-6 text-white'>I want to:</h2>
             <ul>
-              {quicklinks02.map((item,index) => <li key={index} className='mb-4'>
-                <Link to={item.path} className="text-[16px] leading-7 font-[400] text-textColor   ">{item.display}
-              </Link></li>)}
+              {quicklinks02.map((item, index) => (
+                <li key={index} className='mb-4'>
+                  <Link
+                    to={item.path}
+                    className="text-[16px] leading-7 font-[400] text-textColor hover:text-[#2e15d1]"
+                  >
+                    {item.display}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           <div>
             <h2 className='text-[20px] leading-[30px] font-[700] mb-6 text-white'>Support:</h2>
             <ul>
-              {quicklinks03.map((item,index) => <li key={index} className='mb-4'>
-                <Link to={item.path} className="text-[16px] leading-7 font-[400] text-textColor   ">{item.display}
-              </Link></li>)}
+              {quicklinks03.map((item, index) => (
+                <li key={index} className='mb-4'>
+                  <Link
+                    to={item.path}
+                    className="text-[16px] leading-7 font-[400] text-textColor hover:text-[#2e15d1]"
+                  >
+                    {item.display}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
