@@ -1,15 +1,16 @@
-import { useState } from 'react';
+mport { useState } from 'react';
 import signupImg from "../assets/images/signup.jpg";
 import avatar from "../assets/images/doctor-img02.png";
-import { Link ,useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import uploadImageToCloudinary from '../utils/uploadCloudinary';
-import {BASE_URL} from "../../config.js";
-import {toast} from "react-toastify";
-import HashLoader from 'react-spinners/HashLoader'
+import { BASE_URL } from "../../config.js";
+import { toast } from "react-toastify";
+import HashLoader from 'react-spinners/HashLoader';
+
 const Signup = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewURL, setPreviewURL] = useState("");
-  const[loading,setLoading]=useState(false)
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -18,7 +19,7 @@ const Signup = () => {
     gender: "",
     role: "patient",
   });
-  const navigate=useNavigate()
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -32,34 +33,34 @@ const Signup = () => {
         alert("Please upload a valid image file (.jpg or .png).");
         return;
       }
-      
     }
-    const data= await uploadImageToCloudinary(file);
-    setPreviewURL(data.url)
-    setSelectedFile(data.url)
-    setFormData({... formData,photo:data.url})
+    const data = await uploadImageToCloudinary(file);
+    setPreviewURL(data.url);
+    setSelectedFile(data.url);
+    setFormData({ ...formData, photo: data.url });
   };
 
   const submitHandler = async (event) => {
     event.preventDefault();
-    setLoading(true)
-    try{
-    const res=await fetch(`${BASE_URL}/auth/register`,{method:'post',
-      headers:{
-        'Content-Type':'application/json'
-      },
-      body:JSON.stringify(formData),
-    });
-    const response=await res.json()
-    if(!res.ok){
-      throw new Error(Response.message)
-    }
-    setLoading(false)
-    toast.success(response.message)
-    navigate('/Login')
-    }catch(err){
-toast.error(err.message )
-setLoading(false)
+    setLoading(true);
+    try {
+      const res = await fetch(${BASE_URL}/auth/register, {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData),
+      });
+      const response = await res.json();
+      if (!res.ok) {
+        throw new Error(response.message);
+      }
+      setLoading(false);
+      toast.success(response.message);
+      navigate('/Login');
+    } catch (err) {
+      toast.error(err.message);
+      setLoading(false);
     }
     console.log("Form submitted", formData);
     // Add actual API call or form handling logic
@@ -182,11 +183,11 @@ setLoading(false)
 
               <div className="mt-7">
                 <button
-                disabled={loading && true}
+                  disabled={loading && true}
                   type="submit"
                   className="w-full bg-primaryColor text-white text-[18px] leading-[30px] rounded-lg px-4 py-3"
                 >
-                  { loading ? <HashLoader size={35} color="#ffffff"/> : 'Sign Up'}
+                  {loading ? <HashLoader size={35} color="#ffffff" /> : 'Sign Up'}
                 </button>
               </div>
               <p className="mt-5 text-textcolor text-center">
@@ -204,4 +205,3 @@ setLoading(false)
 };
 
 export default Signup;
-
