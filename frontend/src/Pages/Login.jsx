@@ -1,8 +1,8 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../config.js";
 import { toast } from "react-toastify";
-import { useAuth } from "../context/AuthContext.jsx";
+import { useAuth } from "../context/AuthContext.jsx";  // <-- Use this import instead
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -12,7 +12,7 @@ const Login = () => {
 
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { dispatch } = useContext(AuthContext);
+  const { dispatch } = useAuth();  // <-- Use useAuth here
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -22,7 +22,7 @@ const Login = () => {
     event.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch(`${BASE_URL}/auth/login`, {
+      const res = await fetch('${BASE_URL}/auth/login', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
