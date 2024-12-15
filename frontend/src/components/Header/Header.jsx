@@ -3,7 +3,7 @@ import { NavLink, Link } from 'react-router-dom';
 import logo from '../../assets/images/logo.png'; // Adjust the path as needed
 import userImg from '../../assets/images/avatar-icon.png';
 import { BiMenu } from "react-icons/bi";
-import { AuthContext } from '../../context/authContext';
+import { useAuth } from '../../context/AuthContext';
 
 const navLinks = [
   { path: '/home', display: 'Home' },
@@ -15,7 +15,7 @@ const navLinks = [
 const Header = () => {
   const headerRef = useRef(null);
   const menuRef = useRef(null);
-  const { user, role, token } = useContext(AuthContext);
+  const { state: { user, role, token } } = useAuth();
 
   useEffect(() => {
     const handleStickyHeader = () => {
