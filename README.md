@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-The **Doctor Appointment Website** is an easy-to-use platform that allows users to schedule appointments with doctors online. The website provides features for users to find doctors based on specialty, request an appointment, and manage their health-related appointments. It also includes a robust admin panel for managing doctor details and patient appointments.
+**CareConnect**, our **Doctor Appointment Website** is an easy-to-use platform that allows users to schedule appointments with doctors online. The website provides features for users to find doctors based on specialty, request an appointment, and manage their health-related appointments. It also includes a robust admin panel for managing doctor details and patient appointments.
 
 ## Features
 
