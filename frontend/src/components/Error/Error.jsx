@@ -9,4 +9,4 @@ const Error=({errMessage})=>{
         </div>
     );
 };
-export default Loading;
+export default Error;
