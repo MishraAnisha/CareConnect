@@ -25,3 +25,5 @@
 - **MongoDB** for database management
 - **JWT** for authentication
 - **Stripe** for gateway payment API
+
+
