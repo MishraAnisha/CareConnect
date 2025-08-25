@@ -13,7 +13,7 @@
 - **Contact Us**: A page for users to send queries and feedback.
 - **Responsive Design**: Mobile-friendly and accessible on various devices.
 
-## Tech Stack (MERN Stack)
+## Tech Stack (MERN Stack used)
 
 ### Frontend:
 - **React.js**
